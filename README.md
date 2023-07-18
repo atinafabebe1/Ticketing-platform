@@ -33,6 +33,7 @@ This is a web application built with the MERN stack (MongoDB, Express, React, No
 14. **Social Media Integration:** Enable users to share events and ticket purchases on social media platforms, increasing event visibility and facilitating viral marketing.
 
 15. **Integration with Event Management Tools:** Offer integration options with event management platforms, CRM systems, marketing automation tools, and other third-party services to streamline event organization and data synchronization.
+16. **Rating and Reviews:** Allow users to rate and review events, providing feedback for organizers and helping users make informed decisions.
 
 ## Getting Started
 
