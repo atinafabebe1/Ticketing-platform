@@ -7,7 +7,10 @@ const eventSchema = new mongoose.Schema(
         description: { type: String },
         date: { type: Date },
         time: { type: String },
-        venue: { type: String }
+        location: { type: String },
+        genre: { type: String },
+        image: { type: String },
+        venue: { type: String },
     },
     { timestamps: true }
 );
