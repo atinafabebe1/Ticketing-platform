@@ -39,7 +39,7 @@ const updateEvent = asyncHandler(async (req, res, next) => {
     }
 
     if (event.organizerId.toString() !== req.user.id) {
-        return next(new ErrorResponse(`Your are not authorized to update this event`, 404));
+        return next(new ErrorResponse(`Your are not authorized to update this event`, 403));
     }
 
     event = await Event.findByIdAndUpdate(req.params.id, req.body, {
@@ -60,7 +60,7 @@ const deleteEvent = asyncHandler(async (req, res, next) => {
     }
 
     if (event.organizerId.toString() !== req.user.id) {
-        return next(new ErrorResponse(`Your are not authorized to delete this event`, 404));
+        return next(new ErrorResponse(`Your are not authorized to delete this event`, 403));
     }
 
     await Event.findByIdAndDelete(req.params.id)

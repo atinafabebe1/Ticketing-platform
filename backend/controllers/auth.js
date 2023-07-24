@@ -26,7 +26,7 @@ const registerUser = asyncHandler(async (req, res, next) => {
     let user
     // Add additional validation specific to organizers
     if (role === 'organizer') {
-        const { firstName, lastName, website, address, organizationName, description, socialMediaLinks } = req.body
+        const { website, address, organizationName, description, socialMediaLinks } = req.body
 
         // Perform validation for the organizer-specific fields
         if (!organizationName || !description) {
