@@ -1,7 +1,7 @@
 const sendEmail = require('./sendEmail');
 
 const sendVerificationEmail = async (email, verificationToken) => {
-    const verificationUrl = `${process.env.BASE_URL}/api/user/verify/${verificationToken}`;
+    const verificationUrl = `${process.env.BASE_URL}/api/auth/verify/${verificationToken}`;
 
     const message = `<p>Thank you for registering!</p>
     <p>Please click the following link or copy and paste it into your browser to verify your account:</p>
