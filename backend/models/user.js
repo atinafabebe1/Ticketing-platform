@@ -1,7 +1,8 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcryptjs');
-const jwt = require('jsonwebtoken')
-const crypto = require('crypto')
+const jwt = require('jsonwebtoken');
+const crypto = require('crypto');
+const Organizer = require('./organizer');
 
 const userSchema = new mongoose.Schema(
     {
@@ -11,17 +12,26 @@ const userSchema = new mongoose.Schema(
         userName: { type: String, required: true, unique: true },
         password: { type: String, required: true, select: false },
         phoneNumber: { type: String },
-        address: { type: String },
+        location: { type: String },
         role: { type: String, enum: ['user', 'organizer'], default: 'user' },
-        isVerified: { type: Boolean, },
+        isVerified: { type: Boolean },
         refreshToken: [String],
+        resetPasswordToken: String,
+        resetPasswordExpire: Date,
+        organizerInfo: {
+            type: Organizer.schema,
+            required: function () {
+                return this.role === 'organizer';
+            },
+        },
     },
     { timestamps: true }
 );
 
+
 // Encrypt the password before saving
-userSchema.pre("save", async function (next) {
-    if (!this.isModified("password")) {
+userSchema.pre('save', async function (next) {
+    if (!this.isModified('password')) {
         return next();
     }
     this.password = await bcrypt.hash(this.password, 11);
@@ -29,23 +39,23 @@ userSchema.pre("save", async function (next) {
 
 //Sign JWT and return
 userSchema.methods.getSignedJwtAccessToken = function () {
-    return jwt.sign(
-        { id: this._id, userName: this.userName, role: this.role },
-        process.env.JWT_SECRET,
-        {
-            expiresIn: process.env.JWT_EXPIRE,
-        }
-    );
+    return jwt.sign({ id: this._id, userName: this.userName, role: this.role }, process.env.JWT_SECRET, {
+        expiresIn: process.env.JWT_EXPIRE
+    });
 };
+
+// Generate Email Verfiication token and return
+userSchema.methods.getEmailVerificationToken = function () {
+    return jwt.sign({ userId: this._id }, process.env.EMAIL_VERIFICATION_SECRET, {
+        expiresIn: process.env.EMAIL_TOKEN_EXPIRE
+    });
+};
+
 //Sign JWT and return
 userSchema.methods.getSignedJwtRefreshToken = function () {
-    return jwt.sign(
-        { userName: this.userName, id: this._id },
-        process.env.REFERESH_JWT_SECRET,
-        {
-            expiresIn: process.env.REFRESH_JWT_EXPIRE,
-        }
-    );
+    return jwt.sign({ userName: this.userName, id: this._id }, process.env.REFERESH_JWT_SECRET, {
+        expiresIn: process.env.REFRESH_JWT_EXPIRE
+    });
 };
 
 //Match use entered password to hashed password in the database

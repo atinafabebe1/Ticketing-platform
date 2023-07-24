@@ -1,5 +1,4 @@
-const asyncHandler = require('./async');
-const queryString = require('querystring');
+const asyncHandler = require('express-async-handler')
 
 const advancedResults = (model, populate) =>
     asyncHandler(async (req, res, next) => {
