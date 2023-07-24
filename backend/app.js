@@ -1,18 +1,16 @@
-require('dotenv').config();
-
 const express = require('express');
 const app = express();
-const connectDB = require('./config/db');
-
-// Load environment variables from .env file
 
 // Middleware
 app.use(express.json());
 
 // Routes
 const userRouter = require('./routes/user');
-const CookieParser = require('cookieparser');
+const authRouter = require('./routes/auth');
+const eventRouter = require('./routes/event');
 // mount
 app.use('/api/user', userRouter);
+app.use('/api/auth', authRouter);
+app.use('/api/events', eventRouter);
 
 module.exports = app;
