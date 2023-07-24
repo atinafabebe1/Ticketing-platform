@@ -8,9 +8,11 @@ app.use(express.json());
 const userRouter = require('./routes/user');
 const authRouter = require('./routes/auth');
 const eventRouter = require('./routes/event');
+const ticketTypeRouter = require('./routes/ticketType');
+
 // mount
 app.use('/api/user', userRouter);
 app.use('/api/auth', authRouter);
-app.use('/api/events', eventRouter);
+app.use('/api/events', eventRouter, ticketTypeRouter);
 
 module.exports = app;
