@@ -8,8 +8,10 @@ const TicketTypeModel = require('../models/ticketTypes')
 
 router.get("/:eventId/tickets", advancedResult(TicketTypeModel, ""), getEventTickets);
 
-router.post('/:eventId/tickets', auth, authorize('organizer'), createTicket);
-router.put('/:eventId/tickets/:ticketId', auth, authorize('organizer'), updateTicket);
-router.delete('/:eventId/tickets/:ticketId', auth, authorize('organizer'), deleteTicket);
+router.use(auth);
+
+router.post('/:eventId/tickets', authorize('organizer'), createTicket);
+router.put('/:eventId/tickets/:ticketId', authorize('organizer'), updateTicket);
+router.delete('/:eventId/tickets/:ticketId', authorize('organizer'), deleteTicket);
 
 module.exports = router;

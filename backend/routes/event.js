@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { auth } = require('../middlewares/auth');
+const { auth, authorize } = require('../middlewares/auth');
 const {
     createEvent,
     updateEvent,
@@ -12,10 +12,10 @@ const EventModel = require('../models/event')
 
 router.get("/", advancedResult(EventModel, ""), getEvents);
 
-router.use(auth); // only authorized user can access below endpoints
+router.use(auth); // only authorized organizers can access below endpoints
 
-router.post('/', createEvent);
-router.put('/:id', updateEvent);
-router.delete('/:id', deleteEvent);
+router.post('/', authorize('organizer'), createEvent);
+router.put('/:id', authorize('organizer'), updateEvent);
+router.delete('/:id', authorize('organizer'), deleteEvent);
 
 module.exports = router;
