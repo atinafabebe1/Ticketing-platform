@@ -13,8 +13,15 @@ const Navbar = () => {
   };
 
   useEffect(() => {
-    // Prevent body scrolling when the mobile menu is open
-    document.body.style.overflow = isMenuOpen ? 'hidden' : 'auto';
+    const handleBodyOverflow = () => {
+      document.body.style.overflow = isMenuOpen ? 'hidden' : 'auto';
+    };
+
+    handleBodyOverflow();
+
+    return () => {
+      document.body.style.overflow = 'auto'; // Reset body overflow when the component is unmounted
+    };
   }, [isMenuOpen]);
 
   return (
