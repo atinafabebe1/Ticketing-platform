@@ -1,7 +1,7 @@
 import React from 'react';
 import { AiOutlineCloseCircle } from 'react-icons/ai';
 import { useDispatch, useSelector } from 'react-redux';
-import { closeInfo } from '../../../redux/informationSlice';
+import { closeInfo } from '../../../features/informationSlice';
 
 const TicketInfo = () => {
   const showTicketInfo = useSelector((state) => state.offInformation.showTicketInfo);

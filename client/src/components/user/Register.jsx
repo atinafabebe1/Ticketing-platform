@@ -1,6 +1,9 @@
-import { Link } from 'react-router-dom';
-import { useState } from 'react';
+import { Link, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
 import axios from 'axios';
+import { useDispatch, useSelector } from 'react-redux';
+import { register, reset } from '../../features/auth/authSlice';
+
 import Logo from '.././../assets/img/logoS.png';
 
 function CreateAccount() {
@@ -15,7 +18,21 @@ function CreateAccount() {
     role: 'user'
   });
 
-  const [error, setError] = useState('');
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const { user, message, isLoading, isSucess, isError } = useSelector((state) => {
+    return state.auth;
+  });
+
+  useEffect(() => {
+    if (isError) {
+      console.log(isError);
+    }
+    if (isSucess) {
+      console.log(isSucess);
+    }
+  }, [user, isError, isSucess, isLoading, navigate, dispatch, message]);
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -27,17 +44,7 @@ function CreateAccount() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.post('/api/user/register', formData);
-
-      if (response.data.success) {
-        setError('');
-      } else {
-        setError('Registration failed. Please check your details and try again.');
-      }
-    } catch (error) {
-      setError('Something went wrong. Please try again later.');
-    }
+    dispatch(register(formData));
   };
 
   return (
@@ -66,7 +73,7 @@ function CreateAccount() {
                 value={formData.firstName}
                 onChange={handleChange}
                 className={`p-3 border rounded-lg w-full focus:outline-none focus:ring focus:ring-blue-500 ${
-                  error ? 'border-red-500' : 'border-gray-300'
+                  isError ? 'border-red-500' : 'border-gray-300'
                 }`}
                 required
               />
@@ -82,7 +89,7 @@ function CreateAccount() {
                 value={formData.lastName}
                 onChange={handleChange}
                 className={`p-3 border rounded-lg w-full focus:outline-none focus:ring focus:ring-blue-500 ${
-                  error ? 'border-red-500' : 'border-gray-300'
+                  isError ? 'border-red-500' : 'border-gray-300'
                 }`}
                 required
               />
@@ -100,7 +107,7 @@ function CreateAccount() {
               value={formData.email}
               onChange={handleChange}
               className={`p-3 border rounded-lg w-full focus:outline-none focus:ring focus:ring-blue-500 ${
-                error ? 'border-red-500' : 'border-gray-300'
+                isError ? 'border-red-500' : 'border-gray-300'
               }`}
               required
             />
@@ -117,7 +124,7 @@ function CreateAccount() {
               value={formData.userName}
               onChange={handleChange}
               className={`p-3 border rounded-lg w-full focus:outline-none focus:ring focus:ring-blue-500 ${
-                error ? 'border-red-500' : 'border-gray-300'
+                isError ? 'border-red-500' : 'border-gray-300'
               }`}
               required
             />
@@ -134,7 +141,7 @@ function CreateAccount() {
               value={formData.password}
               onChange={handleChange}
               className={`p-3 border rounded-lg w-full focus:outline-none focus:ring focus:ring-blue-500 ${
-                error ? 'border-red-500' : 'border-gray-300'
+                isError ? 'border-red-500' : 'border-gray-300'
               }`}
               required
             />
@@ -151,7 +158,7 @@ function CreateAccount() {
               value={formData.phoneNumber}
               onChange={handleChange}
               className={`p-3 border rounded-lg w-full focus:outline-none focus:ring focus:ring-blue-500 ${
-                error ? 'border-red-500' : 'border-gray-300'
+                isError ? 'border-red-500' : 'border-gray-300'
               }`}
             />
           </div>
@@ -167,12 +174,12 @@ function CreateAccount() {
               value={formData.location}
               onChange={handleChange}
               className={`p-3 border rounded-lg w-full focus:outline-none focus:ring focus:ring-blue-500 ${
-                error ? 'border-red-500' : 'border-gray-300'
+                isError ? 'border-red-500' : 'border-gray-300'
               }`}
             />
           </div>
 
-          {error && <p className="text-red-500 mb-4">{error}</p>}
+          {isError && <p className="text-red-500 mb-4">{message}</p>}
 
           <button
             type="submit"
