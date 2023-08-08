@@ -44,8 +44,6 @@ function OrganizerRegistrationForm() {
 
       if (response.data.success) {
         setError('');
-        // Redirect the user to the login page or any other appropriate page after successful registration
-        // You can use React Router for this purpose.
       } else {
         setError('Registration failed. Please check your details and try again.');
       }
@@ -57,10 +55,12 @@ function OrganizerRegistrationForm() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-lightGray">
       <div className="max-w-sm w-full p-6 bg-white rounded-lg shadow-lg">
-        <div className="flex flex-col items-center mb-8">
-          <img src={Logo} alt="Logo" className="w-28 h-10 mb-2" />
-          <h2 className="text-2xl font-semibold text-mediumGray">Organizer Registration</h2>
-        </div>
+        <Link to="/">
+          <div className="flex flex-col items-center mb-2">
+            <img src={Logo} alt="Logo" className="w-28 h-10 mb-2" />
+            <h2 className="text-2xl font-semibold text-mediumGray">Create an Account</h2>
+          </div>
+        </Link>
 
         <form onSubmit={handleSubmit} className="grid grid-cols-2 gap-4">
           <div>

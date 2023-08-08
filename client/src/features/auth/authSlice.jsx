@@ -4,7 +4,7 @@ import authService from './authService';
 
 const initialState = {
   user: null,
-  message: '',
+  message: null,
   isLoading: false,
   isSucess: false,
   isError: false
@@ -17,11 +17,11 @@ export const initializeAuth = () => (dispatch) => {
   }
 };
 
-export const register = createAsyncThunk('/user/auth/register', async (user, thunkAPI) => {
+export const register = createAsyncThunk('/auth/register', async (user, thunkAPI) => {
   try {
     return await authService.register(user);
   } catch (error) {
-    const message = (error.response && error.response.dat && error.response.data.message) || error.message || error.toString();
+    const message = (error.response && error.response.data && error.response.data.message) || error.response.data.error || error.toString();
     return thunkAPI.rejectWithValue(message);
   }
 });
@@ -30,10 +30,6 @@ export const authSlice = createSlice({
   name: 'auth',
   initialState,
   reducers: {
-    reset: (state) => {
-      state.user = null;
-      state.message = null;
-    },
     setUser: (state, action) => {
       state.user = action.payload;
     }
@@ -45,18 +41,21 @@ export const authSlice = createSlice({
     builder.addCase(register.fulfilled, (state, action) => {
       state.isLoading = false;
       state.isSucess = true;
+      state.isError = false;
+      state.message = action.payload.message;
       state.user = action.payload;
     });
     builder.addCase(register.rejected, (state, action) => {
-      state.isLoading = true;
+      state.isLoading = false;
       state.isError = true;
       state.message = action.payload;
+      state.isSucess = false;
       state.user = null;
     });
   }
 });
 
 // Action creators are generated for each case reducer function
-export const { reset, setUser } = authSlice.actions;
+export const { setUser } = authSlice.actions;
 
 export default authSlice.reducer;

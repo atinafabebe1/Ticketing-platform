@@ -1,8 +1,8 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
-import { register, reset } from '../../features/auth/authSlice';
+import { register } from '../../features/auth/authSlice';
+import { FaSpinner } from 'react-icons/fa';
 
 import Logo from '.././../assets/img/logoS.png';
 
@@ -50,10 +50,12 @@ function CreateAccount() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-lightGray">
       <div className="max-w-sm w-full p-6 bg-white rounded-lg shadow-lg">
-        <div className="flex flex-col items-center mb-2">
-          <img src={Logo} alt="Logo" className="w-28 h-10 mb-2" />
-          <h2 className="text-2xl font-semibold text-mediumGray">Create an Account</h2>
-        </div>
+        <Link to="/">
+          <div className="flex flex-col items-center mb-2">
+            <img src={Logo} alt="Logo" className="w-28 h-10 mb-2" />
+            <h2 className="text-2xl font-semibold text-mediumGray">Create an Account</h2>
+          </div>
+        </Link>
         <div className="text-center mt-2">
           <Link to="/organizer-register" className="text-blue">
             Are you an event organizer? Register here
@@ -180,13 +182,19 @@ function CreateAccount() {
           </div>
 
           {isError && <p className="text-red-500 mb-4">{message}</p>}
+          {isSucess && <p className="text-green-500 mb-4">{message}</p>}
 
-          <button
-            type="submit"
-            className="block w-full bg-primary text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue focus:outline-none focus:ring focus:ring-primary"
-          >
-            Register
-          </button>
+          <div className="flex justify-center mt-4">
+            <button
+              type="submit"
+              className={`block w-full text-white font-semibold py-2 px-4 rounded-lg focus:outline-none focus:ring ${
+                isLoading ? 'bg-gray-400 cursor-not-allowed' : 'bg-primary hover:bg-blue focus:ring-primary'
+              }`}
+              disabled={isLoading}
+            >
+              {isLoading ? <FaSpinner className="animate-spin inline-block mr-2" /> : 'Register'}
+            </button>
+          </div>
         </form>
 
         <div className="text-center mt-4">

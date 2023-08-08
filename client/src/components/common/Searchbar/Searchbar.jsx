@@ -14,7 +14,7 @@ const SearchBar = () => {
   };
 
   return (
-    <form onSubmit={handleSearchSubmit} className="w-full sm:w-80 md:w-96">
+    <form onSubmit={handleSearchSubmit} className="w-full sm:w-80 md:w-96 ">
       <div className="relative flex items-center bg-lightGray h-12 rounded-full">
         <span className="absolute inset-y-0 left-4 flex items-center pointer-events-none">
           <FaSearch className="text-primary" size={20} />

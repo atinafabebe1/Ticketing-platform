@@ -8,6 +8,7 @@ import UserProfile from './pages/UserProfile.jsx';
 import LoginPage from './pages/LoginPage.jsx';
 import RegisterPage from './pages/RegisterPage.jsx';
 import OrganizerRegistrationForm from './components/user/OrganizerRegistrationForm';
+import Topbar from './components/common/TopBar/TopBar';
 
 function App() {
   const location = useLocation();
@@ -21,7 +22,7 @@ function App() {
     <>
       {/* Conditionally render the TicketInfo */}
       {!shouldHideNavbarAndTicketInfo && <TicketInfo />}
-      {!shouldHideNavbarAndTicketInfo && <Navbar />}
+      {!shouldHideNavbarAndTicketInfo && <Topbar />}
 
       <Routes>
         <Route path="/" element={<Home />} />

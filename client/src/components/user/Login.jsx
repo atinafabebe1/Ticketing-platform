@@ -39,10 +39,12 @@ function Login() {
   return (
     <div className="flex items-center justify-center min-h-screen bg-lightGray">
       <div className="max-w-sm w-full p-6 bg-white rounded-lg shadow-lg">
-        <div className="flex flex-col items-center mb-8">
-          <img src={Logo} alt="Logo" className="w-28 h-10 mb-2" />
-          <h2 className="text-2xl font-semibold text-mediumGray">Login to Yene Tic</h2>
-        </div>
+        <Link to="/">
+          <div className="flex flex-col items-center mb-6">
+            <img src={Logo} alt="Logo" className="w-28 h-10 mb-2" />
+            <h2 className="text-2xl font-semibold text-mediumGray ">Login to YeneTicet</h2>
+          </div>
+        </Link>
 
         <form onSubmit={handleSubmit}>
           <div className="mb-4">
@@ -97,10 +99,10 @@ function Login() {
           </button>
         </form>
         <p className="text-mediumGray text-center py-2">Or</p>
-        <div className="mt-4">
+        <div>
           <button
             type="button"
-            className="flex items-center justify-center w-full mt-2 bg-redGoogle text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue focus:outline-none focus:ring focus:ring-primary"
+            className="flex items-center justify-center w-full bg-white text-black font-semibold py-2 px-4 rounded-lg hover:bg-blue focus:outline-none border border-primary focus:ring focus:ring-primary"
           >
             <RiGoogleFill className="mr-2 text-xl" />
             Login with Google
