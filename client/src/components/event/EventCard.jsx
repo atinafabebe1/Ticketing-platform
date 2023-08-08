@@ -1,13 +1,13 @@
 import React from 'react';
-import LargeImage from '../common/ImageCards/LargeImage';
+import ImageCard from '../common/ImageCards/ImageCards';
 import SeeTicketButton from '../common/Button/SeeTickets';
 
-function LargeEventCard({ imageSrc, title, description }) {
+function EventCard({ imageSrc, title, description }) {
   return (
     <div className="w-full md:w-full p-2 mx-auto mb-6">
       <div className="bg-white rounded-lg shadow-md overflow-hidden">
         <div className="relative">
-          <LargeImage src={imageSrc} alt="Event" />
+          <ImageCard src={imageSrc} alt="Event" />
           <div className="absolute bottom-0 left-0 p-4 bg-black bg-opacity-50 text-white">
             <h2 className="text-xl font-semibold">{title}</h2>
           </div>
@@ -25,4 +25,4 @@ function LargeEventCard({ imageSrc, title, description }) {
   );
 }
 
-export default LargeEventCard;
+export default EventCard;
