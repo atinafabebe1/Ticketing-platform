@@ -1,7 +1,7 @@
 import { Link, useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { register } from '../../features/auth/authSlice';
+import { register, reset } from '../../features/auth/authSlice';
 import { FaSpinner } from 'react-icons/fa';
 
 import Logo from '.././../assets/img/logoS.png';
@@ -24,13 +24,13 @@ function CreateAccount() {
   const { user, message, isLoading, isSucess, isError } = useSelector((state) => {
     return state.auth;
   });
+  useEffect(() => {
+    dispatch(reset());
+  }, []);
 
   useEffect(() => {
-    if (isError) {
-      console.log(isError);
-    }
     if (isSucess) {
-      console.log(isSucess);
+      navigate('/signin');
     }
   }, [user, isError, isSucess, isLoading, navigate, dispatch, message]);
 

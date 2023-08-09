@@ -1,7 +1,10 @@
-import { useState } from 'react';
-import axios from 'axios';
+import { Link, useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { register, reset } from '../../features/auth/authSlice';
+import { FaSpinner } from 'react-icons/fa';
+
 import Logo from '.././../assets/img/logoS.png';
-import { Link } from 'react-router-dom';
 
 function OrganizerRegistrationForm() {
   const [formData, setFormData] = useState({
@@ -12,22 +15,31 @@ function OrganizerRegistrationForm() {
     password: '',
     phoneNumber: '',
     location: '',
+    role: 'organizer',
     organizationName: '',
     website: '',
-    description: '',
     address: {
       city: '',
       state: '',
       country: ''
-    },
-    socialMedia: {
-      facebook: '',
-      twitter: '',
-      instagram: ''
     }
   });
 
-  const [error, setError] = useState('');
+  const navigate = useNavigate();
+  const dispatch = useDispatch();
+
+  const { user, message, isLoading, isSucess, isError } = useSelector((state) => {
+    return state.auth;
+  });
+  useEffect(() => {
+    dispatch(reset());
+  }, []);
+
+  useEffect(() => {
+    if (isSucess) {
+      navigate('/signin');
+    }
+  }, [user, isError, isSucess, isLoading, navigate, dispatch, message]);
 
   const handleChange = (e) => {
     const { id, value } = e.target;
@@ -39,22 +51,12 @@ function OrganizerRegistrationForm() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      const response = await axios.post('/api/organizer/register', formData);
-
-      if (response.data.success) {
-        setError('');
-      } else {
-        setError('Registration failed. Please check your details and try again.');
-      }
-    } catch (error) {
-      setError('Something went wrong. Please try again later.');
-    }
+    dispatch(register(formData));
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-lightGray">
-      <div className="max-w-sm w-full p-6 bg-white rounded-lg shadow-lg">
+      <div className="md:max-w-lg sm:max-w-sm w-full p-6 bg-white rounded-lg shadow-lg">
         <Link to="/">
           <div className="flex flex-col items-center mb-2">
             <img src={Logo} alt="Logo" className="w-28 h-10 mb-2" />
@@ -196,19 +198,6 @@ function OrganizerRegistrationForm() {
           </div>
 
           <div>
-            <label htmlFor="description" className="block font-semibold mb-1 text-mediumGray">
-              Description
-            </label>
-            <textarea
-              id="description"
-              placeholder="Your organization description"
-              value={formData.description}
-              onChange={handleChange}
-              className="p-3 border rounded-lg w-full focus:outline-none focus:ring focus:ring-blue-500"
-            />
-          </div>
-
-          <div>
             <label htmlFor="city" className="block font-semibold mb-1 text-mediumGray">
               City
             </label>
@@ -274,79 +263,16 @@ function OrganizerRegistrationForm() {
             />
           </div>
 
-          <div>
-            <label htmlFor="facebook" className="block font-semibold mb-1 text-mediumGray">
-              Facebook
-            </label>
-            <input
-              type="text"
-              id="facebook"
-              placeholder="Facebook URL"
-              value={formData.socialMedia.facebook}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  socialMedia: {
-                    ...formData.socialMedia,
-                    facebook: e.target.value
-                  }
-                })
-              }
-              className="p-3 border rounded-lg w-full focus:outline-none focus:ring focus:ring-blue-500"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="twitter" className="block font-semibold mb-1 text-mediumGray">
-              Twitter
-            </label>
-            <input
-              type="text"
-              id="twitter"
-              placeholder="Twitter URL"
-              value={formData.socialMedia.twitter}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  socialMedia: {
-                    ...formData.socialMedia,
-                    twitter: e.target.value
-                  }
-                })
-              }
-              className="p-3 border rounded-lg w-full focus:outline-none focus:ring focus:ring-blue-500"
-            />
-          </div>
-
-          <div>
-            <label htmlFor="instagram" className="block font-semibold mb-1 text-mediumGray">
-              Instagram
-            </label>
-            <input
-              type="text"
-              id="instagram"
-              placeholder="Instagram URL"
-              value={formData.socialMedia.instagram}
-              onChange={(e) =>
-                setFormData({
-                  ...formData,
-                  socialMedia: {
-                    ...formData.socialMedia,
-                    instagram: e.target.value
-                  }
-                })
-              }
-              className="p-3 border rounded-lg w-full focus:outline-none focus:ring focus:ring-blue-500"
-            />
-          </div>
-
-          {error && <p className="text-red-500 mb-4">{error}</p>}
+          {isError && <p className="text-red-500 mb-4">{message}</p>}
 
           <button
             type="submit"
-            className="col-span-2 w-full bg-primary text-white font-semibold py-2 px-4 rounded-lg hover:bg-blue focus:outline-none focus:ring focus:ring-primary"
+            className={`col-span-2 w-full text-white font-semibold py-2 px-4 rounded-lg focus:outline-none focus:ring ${
+              isLoading ? 'bg-gray-400 cursor-not-allowed' : 'bg-primary hover:bg-blue focus:ring-primary'
+            }`}
+            disabled={isLoading}
           >
-            Register
+            {isLoading ? <FaSpinner className="animate-spin inline-block mr-2" /> : 'Register'}
           </button>
         </form>
         <div className="text-center mt-4">
