@@ -17,31 +17,30 @@ export const initializeAuth = () => (dispatch) => {
   }
 };
 
-export const register = createAsyncThunk('/auth/register', async (user, thunkAPI) => {
+export const register = createAsyncThunk('auth/register', async (user, thunkAPI) => {
   try {
     return await authService.register(user);
   } catch (error) {
-    const message = (error.response && error.response.data && error.response.data.message) || 'Network Error';
+    const message = (error.response && error.response.data && error.response.data.message) || error.response.data.error || error.toString();
 
     return thunkAPI.rejectWithValue(message);
   }
 });
 
-export const login = createAsyncThunk('/auth/login', async (credentials, thunkAPI) => {
+export const login = createAsyncThunk('auth/login', async (credentials, thunkAPI) => {
   try {
     return await authService.login(credentials);
   } catch (error) {
-    console.log('ere');
-    const message = (error.response && error.response.data && error.response.data.message) || 'Network Error';
+    const message = (error.response && error.response.data && error.response.data.message) || error.response.data.error || error.toString();
     return thunkAPI.rejectWithValue(message);
   }
 });
 
-export const logout = createAsyncThunk('/auth/logout', async (thunkAPI) => {
+export const logout = createAsyncThunk('auth/logout', async (thunkAPI) => {
   try {
     return await authService.logout();
   } catch (error) {
-    const message = (error.response && error.response.data && error.response.data.message) || 'Network Error';
+    const message = (error.response && error.response.data && error.response.data.message) || error.response.data.error || error.toString();
     return thunkAPI.rejectWithValue(message);
   }
 });
@@ -54,7 +53,7 @@ export const authSlice = createSlice({
       state.user = action.payload;
     },
     reset: (state, action) => {
-      (state.user = null), (state.message = null), (state.isLoading = false), (state.isSucess = false), (state.isError = false);
+      (state.message = null), (state.isLoading = false), (state.isSucess = false), (state.isError = false);
     }
   },
   extraReducers: (builder) => {
@@ -86,11 +85,11 @@ export const authSlice = createSlice({
       state.isSucess = true;
       state.isError = false;
       state.message = action.payload.message;
-      state.user = action.payload;
+      state.user = action.payload.accessToken;
+      console.log(action.payload.accessToken);
+      console.log(state.user);
     });
     builder.addCase(login.rejected, (state, action) => {
-      console.log(action);
-
       state.isLoading = false;
       state.isError = true;
       state.message = action.payload;
@@ -99,7 +98,7 @@ export const authSlice = createSlice({
     });
 
     // case for logout
-    builder.addCase(logout, (state) => {
+    builder.addCase(logout.fulfilled, (state) => {
       state.user = null;
       state.message = null;
       state.isLoading = false;

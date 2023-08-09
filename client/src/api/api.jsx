@@ -27,7 +27,9 @@ api.interceptors.response.use(
       console.log('access token expired');
       originalRequest._retry = true;
       try {
-        const response = await axios.get('/auth/refresh');
+        const response = await axios.get('http://localhost:3500/api/auth/refresh', {
+          withCredentials: true
+        });
         console.log(response);
         const { accessToken } = response.data;
         Cookies.set('user', accessToken);

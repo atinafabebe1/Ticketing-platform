@@ -14,12 +14,16 @@ const login = async (credentials) => {
 
   if (response.data.accessToken) {
     console.log(response.data);
-    Cookies.set('user', response.data?.accessToken);
+    Cookies.set('user', JSON.stringify(response.data?.accessToken));
   }
   return response?.data;
 };
 const logout = async () => {
-  const response = await api.get(`${APIURL}/logout`);
+  const response = await api.get(`${APIURL}/logout`, {
+    withCredentials: true
+  });
+  Cookies.remove('user');
+
   return response?.data;
 };
 

@@ -1,13 +1,29 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import jwt_decode from 'jwt-decode';
 import SearchBar from '../Searchbar/Searchbar';
 import Logo from '../../../assets/img/logo.png';
 import { RiCalendarEventLine, RiAccountCircleLine } from 'react-icons/ri';
 import { GoGlobe } from 'react-icons/go';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout } from '../../../features/auth/authSlice';
 
 const Navbar = ({ mobileLinks }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const userToken = useSelector((state) => state.auth.user);
+  const dispatch = useDispatch();
+  const [userRole, setUserRole] = useState();
 
+  const handleLogout = () => {
+    dispatch(logout());
+  };
+
+  useEffect(() => {
+    if (userToken) {
+      const decodedToken = jwt_decode(userToken);
+      setUserRole(decodedToken.role);
+    }
+  }, [userToken]);
   const toggleMenu = () => {
     setIsMenuOpen((prevState) => !prevState);
   };
@@ -22,20 +38,56 @@ const Navbar = ({ mobileLinks }) => {
       </Link>
 
       {/* Desktop Links */}
-      <div className="hidden md:flex space-x-6">
-        <Link to="/" className="flex items-center text-md font-bold text-mediumGray hover:text-primary">
-          <GoGlobe className="text-xl mr-2 " />
-          Language
-        </Link>
-        <Link to="/sell" className="flex items-center text-md font-bold text-mediumGray hover:text-primary">
-          <RiCalendarEventLine className="text-xl mr-2" />
-          Organizers
-        </Link>
-        <Link to="/signin" className="flex items-center text-md font-bold text-mediumGray hover:text-primary">
-          <RiAccountCircleLine className="text-2xl mr-2" />
-          Sign In
-        </Link>
-      </div>
+      {userToken ? (
+        userRole === 'user' ? (
+          <>
+            <div className="hidden md:flex space-x-6">
+              <Link to="/mytickets" className="flex items-center text-md font-bold text-mediumGray hover:text-primary">
+                My Tickets
+              </Link>
+              <Link to="/profile" className="flex items-center text-md font-bold text-mediumGray hover:text-primary">
+                Profile
+              </Link>
+              <Link to="/profile" className="flex items-center text-md font-medium text-mediumGray hover:text-primary" onClick={() => handleLogout()}>
+                logout
+              </Link>
+            </div>
+          </>
+        ) : userRole === 'organizer' ? (
+          <>
+            <div className="hidden md:flex space-x-6">
+              <Link to="/events" className="flex items-center text-md font-bold text-mediumGray hover:text-primary">
+                Events
+              </Link>
+              <Link to="/dashboard" className="flex items-center text-md font-bold text-mediumGray hover:text-primary">
+                <GoDashboard className="text-xl mr-2" />
+                Dashboard
+              </Link>
+              <Link to="/reports" className="flex items-center text-md font-bold text-mediumGray hover:text-primary">
+                <GoReport className="text-xl mr-2" />
+                Reports
+              </Link>
+            </div>
+          </>
+        ) : null
+      ) : (
+        <>
+          <div className="hidden md:flex space-x-6">
+            <Link to="/" className="flex items-center text-md font-bold text-mediumGray hover:text-primary">
+              <GoGlobe className="text-xl mr-2 " />
+              Language
+            </Link>
+            <Link to="/sell" className="flex items-center text-md font-bold text-mediumGray hover:text-primary">
+              <RiCalendarEventLine className="text-xl mr-2" />
+              Organizers
+            </Link>
+            <Link to="/signin" className="flex items-center text-md font-bold text-mediumGray hover:text-primary">
+              <RiAccountCircleLine className="text-2xl mr-2" />
+              Sign In
+            </Link>
+          </div>
+        </>
+      )}
 
       {/* Mobile Menu */}
       <div className="md:hidden">
@@ -51,18 +103,47 @@ const Navbar = ({ mobileLinks }) => {
             role="menu"
             aria-label="Mobile Menu"
           >
-            <Link to="/signin" className="block my-4 text-md font-medium text-mediumGray hover:text-primary" role="menuitem">
-              <RiAccountCircleLine className="text-xl inline-block mr-2" />
-              Sign In
-            </Link>
-            <Link to="/sell" className="block my-4 text-md font-bold text-mediumGray hover:text-primary" role="menuitem">
-              <RiCalendarEventLine className="text-xl inline-block mr-2" />
-              Sell
-            </Link>
-            <Link to="/" className="block my-4 text-md font-bold text-mediumGray hover:text-primary" role="menuitem">
-              <GoGlobe className="text-xl inline-block mr-2" />
-              Language
-            </Link>
+            {userToken ? (
+              userRole === 'user' ? (
+                <>
+                  <Link to="/mytickets" className="block my-4 text-md font-medium text-mediumGray hover:text-primary">
+                    My Tickets
+                  </Link>
+                  <Link to="/profile" className=" block my-4 text-md font-medium text-mediumGray hover:text-primary">
+                    Profile
+                  </Link>
+                </>
+              ) : userRole === 'organizer' ? (
+                <>
+                  <Link to="/events" className="block my-4 text-md font-medium text-mediumGray hover:text-primary">
+                    Events
+                  </Link>
+                  <Link to="/dashboard" className="block my-4 text-md font-medium text-mediumGray hover:text-primary">
+                    <GoDashboard className="text-xl mr-2" />
+                    Dashboard
+                  </Link>
+                  <Link to="/reports" className="block my-4 text-md font-medium text-mediumGray hover:text-primary">
+                    <GoReport className="text-xl mr-2" />
+                    Reports
+                  </Link>
+                </>
+              ) : null
+            ) : (
+              <>
+                <Link to="/" className="block my-4 text-md font-medium text-mediumGray hover:text-primary">
+                  <GoGlobe className="text-xl mr-2 " />
+                  Language
+                </Link>
+                <Link to="/sell" className="block my-4 text-md font-medium text-mediumGray hover:text-primary">
+                  <RiCalendarEventLine className="text-xl mr-2" />
+                  Organizers
+                </Link>
+                <Link to="/signin" className="block my-4 text-md font-medium text-mediumGray hover:text-primary">
+                  <RiAccountCircleLine className="text-2xl mr-2" />
+                  Sign In
+                </Link>
+              </>
+            )}
             {mobileLinks.map((link, index) => (
               <div key={index} className="my-4">
                 <Link to={link.to} className="block text-md font-bold text-mediumGray hover:text-primary" role="menuitem">

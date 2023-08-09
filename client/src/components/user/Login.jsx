@@ -30,6 +30,7 @@ function Login() {
     }
     console.log('isSucces:', isSucess);
     if (isSucess) {
+      dispatch(reset());
       navigate('/');
     }
     console.log(message);
