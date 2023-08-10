@@ -13,7 +13,7 @@ const initialState = {
 export const initializeAuth = () => (dispatch) => {
   const userFromCookie = Cookies.get('user');
   if (userFromCookie) {
-    dispatch(setUser(JSON.parse(userFromCookie)));
+    dispatch(setUser(userFromCookie));
   }
 };
 

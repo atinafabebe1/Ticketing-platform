@@ -9,6 +9,6 @@ const store = configureStore({
   }
 });
 
-store.dispatch(initializeAuth());
+// store.dispatch(initializeAuth());
 
 export default store;

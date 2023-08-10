@@ -14,7 +14,7 @@ const login = async (credentials) => {
 
   if (response.data.accessToken) {
     console.log(response.data);
-    Cookies.set('user', JSON.stringify(response.data?.accessToken));
+    Cookies.set('user', JSON.stringify({ accessToken: response.data.accessToken }));
   }
   return response?.data;
 };

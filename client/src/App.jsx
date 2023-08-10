@@ -3,12 +3,14 @@ import TicketInfo from './components/common/TicketInfo/TicketInfo';
 import Navbar from './components/common/Navbar/Navbar';
 import Home from './pages/Home.jsx';
 import Events from './pages/Events.jsx';
-import EventDetails from './pages/EventDetails.jsx';
 import UserProfile from './pages/UserProfile.jsx';
 import LoginPage from './pages/LoginPage.jsx';
 import RegisterPage from './pages/RegisterPage.jsx';
 import OrganizerRegistrationForm from './components/user/OrganizerRegistrationForm';
 import Topbar from './components/common/TopBar/TopBar';
+import AddEventPage from './pages/AddEventPage';
+import Tickets from './pages/Ticketspage';
+import AddTicketPage from './pages/AddTicketPage';
 
 function App() {
   const location = useLocation();
@@ -27,7 +29,9 @@ function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/events" element={<Events />} />
-        <Route path="/events/:eventId" element={<EventDetails />} />
+        <Route path="/events/add-event" element={<AddEventPage />} />
+        <Route path="/events/:eventId/tickets" element={<Tickets />} />
+        <Route path="/events/:eventId/tickets/add" element={<AddTicketPage />} />
         <Route path="/profile" element={<UserProfile />} />
         <Route path="/signin" element={<LoginPage />} />
         <Route path="/signup" element={<RegisterPage />} />

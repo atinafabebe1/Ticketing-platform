@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Link } from 'react-router-dom';
+import { useDispatch, useSelector } from 'react-redux';
+import { logout, initializeAuth } from '../../../features/auth/authSlice';
 import jwt_decode from 'jwt-decode';
 import SearchBar from '../Searchbar/Searchbar';
 import Logo from '../../../assets/img/logo.png';
-import { RiCalendarEventLine, RiAccountCircleLine } from 'react-icons/ri';
-import { GoGlobe } from 'react-icons/go';
-import { useDispatch, useSelector } from 'react-redux';
-import { logout } from '../../../features/auth/authSlice';
+import { RiCalendarEventLine, RiAccountCircleLine, RiLogoutBoxLine, RiTicket2Line, RiDashboard2Line } from 'react-icons/ri';
+import { GoGlobe, GoReport } from 'react-icons/go';
 
 const Navbar = ({ mobileLinks }) => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -14,16 +14,29 @@ const Navbar = ({ mobileLinks }) => {
   const dispatch = useDispatch();
   const [userRole, setUserRole] = useState();
 
-  const handleLogout = () => {
-    dispatch(logout());
+  const handleLogout = (e) => {
+    e.preventDefault();
+    if (window.confirm('Are you sure you want to logout?')) {
+      dispatch(logout());
+    }
   };
 
   useEffect(() => {
+    dispatch(initializeAuth());
+  }, [userToken]);
+
+  useEffect(() => {
     if (userToken) {
-      const decodedToken = jwt_decode(userToken);
-      setUserRole(decodedToken.role);
+      try {
+        const decodedToken = jwt_decode(userToken);
+        setUserRole(decodedToken.role);
+      } catch (error) {
+        console.error('Error decoding token:', error);
+        setUserRole(null);
+      }
     }
   }, [userToken]);
+
   const toggleMenu = () => {
     setIsMenuOpen((prevState) => !prevState);
   };
@@ -43,12 +56,15 @@ const Navbar = ({ mobileLinks }) => {
           <>
             <div className="hidden md:flex space-x-6">
               <Link to="/mytickets" className="flex items-center text-md font-bold text-mediumGray hover:text-primary">
+                <RiTicket2Line className="text-xl mr-2 " />
                 My Tickets
               </Link>
               <Link to="/profile" className="flex items-center text-md font-bold text-mediumGray hover:text-primary">
+                <RiAccountCircleLine className="text-xl mr-2 " />
                 Profile
               </Link>
-              <Link to="/profile" className="flex items-center text-md font-medium text-mediumGray hover:text-primary" onClick={() => handleLogout()}>
+              <Link to="/" className="flex items-center text-md font-medium text-mediumGray hover:text-primary" onClick={(e) => handleLogout(e)}>
+                <RiLogoutBoxLine className="text-xl mr-2 " />
                 logout
               </Link>
             </div>
@@ -60,12 +76,16 @@ const Navbar = ({ mobileLinks }) => {
                 Events
               </Link>
               <Link to="/dashboard" className="flex items-center text-md font-bold text-mediumGray hover:text-primary">
-                <GoDashboard className="text-xl mr-2" />
+                <RiDashboard2Line className="text-xl mr-2" />
                 Dashboard
               </Link>
               <Link to="/reports" className="flex items-center text-md font-bold text-mediumGray hover:text-primary">
                 <GoReport className="text-xl mr-2" />
                 Reports
+              </Link>
+              <Link to="/" className="flex items-center text-md font-medium text-mediumGray hover:text-primary" onClick={(e) => handleLogout(e)}>
+                <RiLogoutBoxLine className="text-xl mr-2 " />
+                logout
               </Link>
             </div>
           </>
@@ -78,7 +98,6 @@ const Navbar = ({ mobileLinks }) => {
               Language
             </Link>
             <Link to="/sell" className="flex items-center text-md font-bold text-mediumGray hover:text-primary">
-              <RiCalendarEventLine className="text-xl mr-2" />
               Organizers
             </Link>
             <Link to="/signin" className="flex items-center text-md font-bold text-mediumGray hover:text-primary">
@@ -135,7 +154,6 @@ const Navbar = ({ mobileLinks }) => {
                   Language
                 </Link>
                 <Link to="/sell" className="block my-4 text-md font-medium text-mediumGray hover:text-primary">
-                  <RiCalendarEventLine className="text-xl mr-2" />
                   Organizers
                 </Link>
                 <Link to="/signin" className="block my-4 text-md font-medium text-mediumGray hover:text-primary">

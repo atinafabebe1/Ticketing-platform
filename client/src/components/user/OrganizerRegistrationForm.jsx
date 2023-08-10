@@ -37,7 +37,7 @@ function OrganizerRegistrationForm() {
 
   useEffect(() => {
     if (isSucess) {
-      navigate('/signin');
+      // navigate('/signin');
     }
   }, [user, isError, isSucess, isLoading, navigate, dispatch, message]);
 
@@ -264,6 +264,7 @@ function OrganizerRegistrationForm() {
           </div>
 
           {isError && <p className="text-red-500 mb-4">{message}</p>}
+          {isSucess && <p className="col-span-2 w-full text-green-500 mb-4">{message}</p>}
 
           <button
             type="submit"
