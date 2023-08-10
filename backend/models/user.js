@@ -13,17 +13,17 @@ const userSchema = new mongoose.Schema(
         password: { type: String, required: true, select: false },
         phoneNumber: { type: String },
         location: { type: String },
-        role: { type: String, enum: ['user', 'organizer'], default: 'user' },
-        isVerified: { type: Boolean },
-        refreshToken: [String],
-        resetPasswordToken: String,
-        resetPasswordExpire: Date,
         organizerInfo: {
             type: Organizer.schema,
             required: function () {
                 return this.role === 'organizer';
             },
         },
+        role: { type: String, enum: ['user', 'organizer'], default: 'user' },
+        refreshToken: [String],
+        resetPasswordExpire: Date,
+        resetPasswordToken: String,
+        isVerified: { type: Boolean },
     },
     { timestamps: true }
 );

@@ -11,6 +11,7 @@ const eventSchema = new mongoose.Schema(
         genre: { type: String },
         image: { type: String },
         venue: { type: String },
+        cloudinary_id: { type: String },
     },
     { timestamps: true }
 );

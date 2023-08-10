@@ -15,7 +15,7 @@ const sendVerificationEmail = async (email, verificationToken) => {
             message
         });
     } catch (error) {
-        throw new Error('Error sending verification email');
+        throw new Error('Error while sending verification email');
     }
 };
 

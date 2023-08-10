@@ -10,6 +10,6 @@ router.post('/login', loginLimiter, loginUser);
 router.get('/logout', auth, logoutUser);
 router.post('/forgotpassword', forgotPassword);
 router.put('/resetpassword', resetPassword);
-router.get('/refresh', auth, refresh);
+router.get('/refresh', refresh);
 
 module.exports = router;

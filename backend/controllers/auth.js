@@ -5,45 +5,58 @@ const validator = require('validator');
 const jwt = require('jsonwebtoken');
 const sendEmail = require('../utils/sendEmail.js');
 const sendVerificationEmail = require('../utils/sendVerificationEmail');
-const crypto = require('crypto')
-const bcrpyt = require('bcryptjs')
+const crypto = require('crypto');
 
 // POST api/users/register
 const registerUser = asyncHandler(async (req, res, next) => {
     const { userName, password, email, role } = req.body;
 
-    if (!validator.isStrongPassword(password, { minSymbols: 0 })) {
+    if (
+        !validator.isStrongPassword(password, {
+            minSymbols: 0,
+            minLowercase: 1,
+            minUppercase: 1,
+            minNumbers: 0
+        })
+    ) {
         return next(new ErrorResponse('Weak Password', 400));
     }
     if (!validator.isEmail(email)) {
         return next(new ErrorResponse('Invalid Email', 400));
     }
 
-    const duplicate = await User.findOne({ userName: userName });
-    if (duplicate) {
-        return next(new ErrorResponse('Duplicate User', 409));
+    const duplicateUsername = await User.findOne({ userName: userName });
+    const duplicateEmail = await User.findOne({ email: email });
+
+    if (duplicateUsername) {
+        const usernameError = new ErrorResponse('The chosen username is already in use. Please select a different username.', 409);
+        return next(usernameError);
     }
-    let user
+
+    if (duplicateEmail) {
+        const emailError = new ErrorResponse('The provided email address is associated with an existing account. Please use a different email.', 409);
+        return next(emailError);
+    }
+
+    let user;
+    console.log(req.body)
     // Add additional validation specific to organizers
     if (role === 'organizer') {
-        const { website, address, organizationName, description, socialMediaLinks } = req.body
+        const { website, address, organizationName } = req.body;
 
         // Perform validation for the organizer-specific fields
-        if (!organizationName || !description) {
+        if (!organizationName || !address) {
             return next(new ErrorResponse('Missing required organizer fields', 400));
         }
 
-        console.log(req.body)
         user = await User.create({
             ...req.body,
-            "organizerInfo.organizationName": organizationName,
-            "organizerInfo.website": website,
-            "organizerInfo.socialMedia": socialMediaLinks,
-            "organizerInfo.address": address,
-            "organizerInfo.description": description,
+            'organizerInfo.organizationName': organizationName,
+            'organizerInfo.website': website,
+            'organizerInfo.address': address,
         });
     } else {
-        user = await User.create(req.body)
+        user = await User.create(req.body);
     }
 
     // Generate a verification token for the user
@@ -61,7 +74,6 @@ const registerUser = asyncHandler(async (req, res, next) => {
         message: 'You have successfully registered! A verification email has been sent to your email address. Please check your inbox and spam folder.'
     });
 });
-
 
 // GET api/auth/verify
 const verifyUser = asyncHandler(async (req, res, next) => {
@@ -141,9 +153,9 @@ const loginUser = asyncHandler(async (req, res, next) => {
         // Creates Secure Cookie with refresh token
         res.cookie('token', newRefreshToken, {
             httpOnly: true,
-            secure: false,
+            secure: true,
             sameSite: 'lax',
-            maxAge: 5 * 60 * 60 * 1000 // set maxAge to 5 hours
+            maxAge: 10 * 60 * 60 * 1000 // set maxAge to 10 hours
         });
 
         // Send authorization roles and access token to user
@@ -155,14 +167,10 @@ const loginUser = asyncHandler(async (req, res, next) => {
 
 // PUT api/auth/resetpassword/:resetToken
 const resetPassword = asyncHandler(async (req, res, next) => {
-    console.log(req.body.resetToken)
     const resetPasswordToken = crypto.createHash('sha256').update(req.body.resetToken).digest('hex');
-    console.log(resetPasswordToken)
-
-    console.log(resetPasswordToken)
 
     const user = await User.findOne({
-        resetPasswordToken: resetPasswordToken,
+        resetPasswordToken: resetPasswordToken
         // resetPasswordExpire: { $gt: Date.now() }
     });
 
@@ -248,9 +256,7 @@ const refresh = asyncHandler(async (req, res, next) => {
     const cookies = req.cookies;
     if (!cookies?.token) return res.sendStatus(401);
     const refreshToken = cookies.token;
-    console.log(refreshToken);
     res.clearCookie('token', { httpOnly: true, sameSite: 'lax', secure: false });
-    console.log('after cookie cleared ' + req.cookies?.token);
     const foundUser = await User.findOne({ refreshToken });
 
     // Detected refresh token reuse!
@@ -273,13 +279,11 @@ const refresh = asyncHandler(async (req, res, next) => {
     // Verify jwt
     jwt.verify(refreshToken, process.env.REFERESH_JWT_SECRET, async (err, decoded) => {
         if (err) {
-            console.log('expired refresh token');
             foundUser.refreshToken = [...newRefreshTokenArray];
             await foundUser.save();
             return res.sendStatus(403);
         }
-        console.log(foundUser);
-        console.log(decoded);
+
 
         if (foundUser.userName !== decoded.userName) {
             return res.sendStatus(403);

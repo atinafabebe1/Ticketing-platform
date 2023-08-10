@@ -17,7 +17,7 @@ const getUserProfile = asyncHandler(async (req, res) => {
 });
 
 // PUT api/user/profile:id
-const updateUserProfile = asyncHandler(async (req, res) => {
+const updateUserProfile = asyncHandler(async (req, res, next) => {
     let user = await User.findById(req.params.id);
     if (!user) {
         return next(new ErrorResponse(`User not found with ${req.params.id}`, 404));
