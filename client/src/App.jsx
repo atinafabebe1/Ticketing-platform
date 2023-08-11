@@ -11,6 +11,7 @@ import Topbar from './components/common/TopBar/TopBar';
 import AddEventPage from './pages/AddEventPage';
 import Tickets from './pages/Ticketspage';
 import AddTicketPage from './pages/AddTicketPage';
+import OrderPage from './pages/OrderPage.jsx';
 
 function App() {
   const location = useLocation();
@@ -30,8 +31,9 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/events" element={<Events />} />
         <Route path="/events/add-event" element={<AddEventPage />} />
-        <Route path="/events/:eventId/tickets" element={<Tickets />} />
-        <Route path="/events/:eventId/tickets/add" element={<AddTicketPage />} />
+        <Route path="/event/:eventId/tickets" element={<Tickets />} />
+        <Route path="/event/:eventId/tickets/add" element={<AddTicketPage />} />
+        <Route path="/event/:eventId/tickets/:ticketId/order" element={<OrderPage />} />
         <Route path="/profile" element={<UserProfile />} />
         <Route path="/signin" element={<LoginPage />} />
         <Route path="/signup" element={<RegisterPage />} />

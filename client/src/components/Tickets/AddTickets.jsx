@@ -6,7 +6,7 @@ function AddTickets() {
   const { eventId } = useParams();
   const navigate = useNavigate();
   const [ticketData, setTicketData] = useState({
-    type: '',
+    title: '',
     price: '',
     quantity: ''
   });
@@ -24,6 +24,7 @@ function AddTickets() {
 
     try {
       await api.post(`/events/${eventId}/tickets`, ticketData);
+
       navigate(`/events/${eventId}/tickets`);
     } catch (error) {
       console.error(error);
@@ -31,19 +32,19 @@ function AddTickets() {
   };
 
   return (
-    <div className="p-8 bg-gray-100 min-h-screen flex justify-center items-center">
+    <div className="p-2 bg-gray-100 min-h-screen flex justify-center items-center">
       <div className="bg-white p-8 rounded-lg shadow-md w-full sm:w-96">
         <h1 className="text-2xl font-semibold mb-6">Add New Ticket</h1>
         <form onSubmit={handleSubmit} className="space-y-4">
           <div>
             <label htmlFor="type" className="block text-sm font-medium text-gray-700">
-              Ticket Type
+              Title
             </label>
             <input
               type="text"
-              id="type"
-              name="type"
-              value={ticketData.type}
+              id="title"
+              name="title"
+              value={ticketData.title}
               onChange={handleInputChange}
               className="w-full border rounded-md py-2 px-3 focus:outline-none focus:ring focus:border-blue-500"
             />

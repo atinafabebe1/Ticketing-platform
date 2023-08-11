@@ -20,7 +20,7 @@ const EventsTable = ({ events, onSeeTickets, onEditEvent, onDeleteEvent }) => {
             <tr key={event.id} className="hover:bg-gray-100 transition-colors">
               <td className="px-6 py-4">
                 <div className="flex items-center space-x-4">
-                  <img src={event.image} alt={event.title} className="w-12 h-12 rounded-full object-cover" />
+                  <img src={event.image} alt={event.title} className="w-12 h-12 object-cover" />
                   <span className="text-sm font-medium">{event.title}</span>
                 </div>
               </td>

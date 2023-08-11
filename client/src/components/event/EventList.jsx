@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
 import EventCard from './EventCard';
 import Icon from '../common/Icon/MoreEvents.jsx';
 import PreviousIcon from '../common/Icon/PreviousIcon.jsx';
-import axios from 'axios';
-
-import Image from '../../assets/img/niger.png';
 
 const EventList = ({ category }) => {
   const [events, setEvents] = useState([]);
@@ -72,15 +71,15 @@ const EventList = ({ category }) => {
           {isLoading ? (
             // Placeholder for loading
             <div className="w-full animate-pulse border border-gray-300 p-4 rounded-md">
-              <div className="h-20 bg-gray-200 mb-2"></div>
-              <div className="h-4 bg-gray-200"></div>
-              <div className="h-4 bg-gray-200 mt-1"></div>
+              <div className="h-20 bg-gray-100 mb-2"></div>
+              <div className="h-4 bg-gray-100"></div>
+              <div className="h-4 bg-gray-100 mt-1"></div>
             </div>
           ) : (
             // Display events
             events.map((event) => (
-              <div key={event.id} className="w-full">
-                <EventCard imageSrc={Image} title={event?.title} description={event?.description} />
+              <div key={event._id} className="w-full">
+                <EventCard event={event} />
               </div>
             ))
           )}

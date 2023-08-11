@@ -43,7 +43,6 @@ const Topbar = () => {
 
   useEffect(() => {
     dispatch(initializeAuth());
-    console.log(userToken);
   }, [userToken]);
 
   useEffect(() => {
@@ -51,9 +50,7 @@ const Topbar = () => {
       try {
         const decodedToken = jwt_decode(userToken);
         setUserRole(decodedToken.role);
-      } catch (error) {
-        console.error('Error decoding token:', error);
-      }
+      } catch (error) {}
     }
   }, [userToken]);
 

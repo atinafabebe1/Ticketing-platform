@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import { logout, initializeAuth } from '../../../features/auth/authSlice';
 import jwt_decode from 'jwt-decode';
 import SearchBar from '../Searchbar/Searchbar';
 import Logo from '../../../assets/img/logo.png';
-import { RiCalendarEventLine, RiAccountCircleLine, RiLogoutBoxLine, RiTicket2Line, RiDashboard2Line } from 'react-icons/ri';
+import { RiAccountCircleLine, RiLogoutBoxLine, RiTicket2Line, RiDashboard2Line } from 'react-icons/ri';
 import { GoGlobe, GoReport } from 'react-icons/go';
 
 const Navbar = ({ mobileLinks }) => {
@@ -13,11 +13,13 @@ const Navbar = ({ mobileLinks }) => {
   const userToken = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
   const [userRole, setUserRole] = useState();
+  const navigate = useNavigate();
 
   const handleLogout = (e) => {
     e.preventDefault();
     if (window.confirm('Are you sure you want to logout?')) {
       dispatch(logout());
+      navigate('/signin');
     }
   };
 
@@ -31,7 +33,6 @@ const Navbar = ({ mobileLinks }) => {
         const decodedToken = jwt_decode(userToken);
         setUserRole(decodedToken.role);
       } catch (error) {
-        console.error('Error decoding token:', error);
         setUserRole(null);
       }
     }
@@ -72,12 +73,12 @@ const Navbar = ({ mobileLinks }) => {
         ) : userRole === 'organizer' ? (
           <>
             <div className="hidden md:flex space-x-6">
-              <Link to="/events" className="flex items-center text-md font-bold text-mediumGray hover:text-primary">
-                Events
-              </Link>
-              <Link to="/dashboard" className="flex items-center text-md font-bold text-mediumGray hover:text-primary">
+              <Link to="/" className="flex items-center text-md font-bold text-mediumGray hover:text-primary">
                 <RiDashboard2Line className="text-xl mr-2" />
                 Dashboard
+              </Link>
+              <Link to="/events" className="flex items-center text-md font-bold text-mediumGray hover:text-primary">
+                Events
               </Link>
               <Link to="/reports" className="flex items-center text-md font-bold text-mediumGray hover:text-primary">
                 <GoReport className="text-xl mr-2" />
@@ -86,6 +87,10 @@ const Navbar = ({ mobileLinks }) => {
               <Link to="/" className="flex items-center text-md font-medium text-mediumGray hover:text-primary" onClick={(e) => handleLogout(e)}>
                 <RiLogoutBoxLine className="text-xl mr-2 " />
                 logout
+              </Link>
+              <Link to="/profile" className="flex items-center text-md font-medium text-mediumGray hover:text-primary">
+                <RiAccountCircleLine className="text-xl mr-2 " />
+                Profile
               </Link>
             </div>
           </>
@@ -138,7 +143,6 @@ const Navbar = ({ mobileLinks }) => {
                     Events
                   </Link>
                   <Link to="/dashboard" className="block my-4 text-md font-medium text-mediumGray hover:text-primary">
-                    <GoDashboard className="text-xl mr-2" />
                     Dashboard
                   </Link>
                   <Link to="/reports" className="block my-4 text-md font-medium text-mediumGray hover:text-primary">

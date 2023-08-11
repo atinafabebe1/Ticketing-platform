@@ -31,7 +31,7 @@ function Events() {
   };
   const handleSeeTicket = (event) => {
     console.log(event);
-    navigate(`/events/${event._id}/tickets`);
+    navigate(`/event/${event._id}/tickets`);
   };
 
   return (
