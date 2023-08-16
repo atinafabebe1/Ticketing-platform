@@ -16,9 +16,9 @@ const OrderQuantityForm = ({ ticketQuantity, handleTicketQuantityChange, handleO
         <option value={1}>1</option>
         <option value={2}>2</option>
         <option value={3}>3</option>
-        <option value={3}>4</option>
-        <option value={3}>5</option>
-        <option value={3}>6</option>
+        <option value={4}>4</option>
+        <option value={5}>5</option>
+        <option value={6}>6</option>
       </select>
       <button onClick={handleOrderClick} className="mt-4 bg-blue text-white px-4 py-2 rounded-md hover:bg-blue w-full">
         Continue to Order

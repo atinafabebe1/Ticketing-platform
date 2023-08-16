@@ -46,6 +46,7 @@ function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     dispatch(login(formData));
+    navigate(-1);
   };
 
   return (

@@ -8,7 +8,7 @@ import Logo from '../../../assets/img/logo.png';
 import { RiAccountCircleLine, RiLogoutBoxLine, RiTicket2Line, RiDashboard2Line } from 'react-icons/ri';
 import { GoGlobe, GoReport } from 'react-icons/go';
 
-const Navbar = ({ mobileLinks }) => {
+const Navbar = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const userToken = useSelector((state) => state.auth.user);
   const dispatch = useDispatch();
@@ -19,8 +19,29 @@ const Navbar = ({ mobileLinks }) => {
     e.preventDefault();
     if (window.confirm('Are you sure you want to logout?')) {
       dispatch(logout());
+      setUserRole(null);
       navigate('/signin');
     }
+  };
+
+  const links = {
+    user: [
+      { to: '/mytickets', label: 'My Tickets', icon: <RiTicket2Line className="text-xl mr-2" /> },
+      { to: '/profile', label: 'Profile', icon: <RiAccountCircleLine className="text-xl mr-2" /> },
+      { to: '/', label: 'Logout', icon: <RiLogoutBoxLine className="text-xl mr-2" />, onClick: handleLogout }
+    ],
+    organizer: [
+      { to: '/', label: 'Dashboard', icon: <RiDashboard2Line className="text-xl mr-2" /> },
+      { to: '/events', label: 'Events' },
+      { to: '/reports', label: 'Reports', icon: <GoReport className="text-xl mr-2" /> },
+      { to: '/profile', label: 'Profile', icon: <RiAccountCircleLine className="text-xl mr-2" /> },
+      { to: '/', label: 'Logout', icon: <RiLogoutBoxLine className="text-xl mr-2" />, onClick: handleLogout }
+    ],
+    guest: [
+      { to: '/', label: 'Language', icon: <GoGlobe className="text-xl mr-2" /> },
+      { to: '/sell', label: 'Organizers' },
+      { to: '/signin', label: 'Sign In', icon: <RiAccountCircleLine className="text-2xl mr-2" /> }
+    ]
   };
 
   useEffect(() => {
@@ -35,6 +56,8 @@ const Navbar = ({ mobileLinks }) => {
       } catch (error) {
         setUserRole(null);
       }
+    } else {
+      setUserRole(null);
     }
   }, [userToken]);
 
@@ -46,72 +69,32 @@ const Navbar = ({ mobileLinks }) => {
     <nav className="flex items-center justify-between p-4 bg-background text-black md:px-8">
       <Link to="/">
         <div className="flex items-center space-x-4 mr-2">
-          <img src={Logo} alt="Logo" className="sm:w-24 sm:h-18 md:w-32 md:h-26  rounded-full md:mr-8 sm:mr-2" />
+          <img src={Logo} alt="Logo" className="sm:w-24 sm:h-18 md:w-32 md:h-26 rounded-full md:mr-8 sm:mr-2" />
           <SearchBar />
         </div>
       </Link>
 
-      {/* Desktop Links */}
-      {userToken ? (
-        userRole === 'user' ? (
-          <>
-            <div className="hidden md:flex space-x-6">
-              <Link to="/mytickets" className="flex items-center text-md font-bold text-mediumGray hover:text-primary">
-                <RiTicket2Line className="text-xl mr-2 " />
-                My Tickets
+      {/* Desktop and Mobile Links */}
+      <div className="hidden md:flex space-x-6">
+        {links[userRole]
+          ? links[userRole].map((link, index) => (
+              <Link
+                key={index}
+                to={link.to}
+                className="flex items-center text-md font-bold text-mediumGray hover:text-primary"
+                onClick={link.onClick}
+              >
+                {link.icon}
+                {link.label}
               </Link>
-              <Link to="/profile" className="flex items-center text-md font-bold text-mediumGray hover:text-primary">
-                <RiAccountCircleLine className="text-xl mr-2 " />
-                Profile
+            ))
+          : links.guest.map((link, index) => (
+              <Link key={index} to={link.to} className="flex items-center text-md font-bold text-mediumGray hover:text-primary">
+                {link.icon}
+                {link.label}
               </Link>
-              <Link to="/" className="flex items-center text-md font-medium text-mediumGray hover:text-primary" onClick={(e) => handleLogout(e)}>
-                <RiLogoutBoxLine className="text-xl mr-2 " />
-                logout
-              </Link>
-            </div>
-          </>
-        ) : userRole === 'organizer' ? (
-          <>
-            <div className="hidden md:flex space-x-6">
-              <Link to="/" className="flex items-center text-md font-bold text-mediumGray hover:text-primary">
-                <RiDashboard2Line className="text-xl mr-2" />
-                Dashboard
-              </Link>
-              <Link to="/events" className="flex items-center text-md font-bold text-mediumGray hover:text-primary">
-                Events
-              </Link>
-              <Link to="/reports" className="flex items-center text-md font-bold text-mediumGray hover:text-primary">
-                <GoReport className="text-xl mr-2" />
-                Reports
-              </Link>
-              <Link to="/" className="flex items-center text-md font-medium text-mediumGray hover:text-primary" onClick={(e) => handleLogout(e)}>
-                <RiLogoutBoxLine className="text-xl mr-2 " />
-                logout
-              </Link>
-              <Link to="/profile" className="flex items-center text-md font-medium text-mediumGray hover:text-primary">
-                <RiAccountCircleLine className="text-xl mr-2 " />
-                Profile
-              </Link>
-            </div>
-          </>
-        ) : null
-      ) : (
-        <>
-          <div className="hidden md:flex space-x-6">
-            <Link to="/" className="flex items-center text-md font-bold text-mediumGray hover:text-primary">
-              <GoGlobe className="text-xl mr-2 " />
-              Language
-            </Link>
-            <Link to="/sell" className="flex items-center text-md font-bold text-mediumGray hover:text-primary">
-              Organizers
-            </Link>
-            <Link to="/signin" className="flex items-center text-md font-bold text-mediumGray hover:text-primary">
-              <RiAccountCircleLine className="text-2xl mr-2" />
-              Sign In
-            </Link>
-          </div>
-        </>
-      )}
+            ))}
+      </div>
 
       {/* Mobile Menu */}
       <div className="md:hidden">
@@ -127,62 +110,19 @@ const Navbar = ({ mobileLinks }) => {
             role="menu"
             aria-label="Mobile Menu"
           >
-            {userToken ? (
-              userRole === 'user' ? (
-                <>
-                  <Link to="/mytickets" className="block my-4 text-md font-medium text-mediumGray hover:text-primary">
-                    My Tickets
+            {links[userRole]
+              ? links[userRole].map((link, index) => (
+                  <Link key={index} to={link.to} className="block my-4 text-md font-medium text-mediumGray hover:text-primary">
+                    {link.icon}
+                    {link.label}
                   </Link>
-                  <Link to="/profile" className=" block my-4 text-md font-medium text-mediumGray hover:text-primary">
-                    Profile
+                ))
+              : links.guest.map((link, index) => (
+                  <Link key={index} to={link.to} className="block my-4 text-md font-medium text-mediumGray hover:text-primary">
+                    {link.icon}
+                    {link.label}
                   </Link>
-                </>
-              ) : userRole === 'organizer' ? (
-                <>
-                  <Link to="/events" className="block my-4 text-md font-medium text-mediumGray hover:text-primary">
-                    Events
-                  </Link>
-                  <Link to="/dashboard" className="block my-4 text-md font-medium text-mediumGray hover:text-primary">
-                    Dashboard
-                  </Link>
-                  <Link to="/reports" className="block my-4 text-md font-medium text-mediumGray hover:text-primary">
-                    <GoReport className="text-xl mr-2" />
-                    Reports
-                  </Link>
-                </>
-              ) : null
-            ) : (
-              <>
-                <Link to="/" className="block my-4 text-md font-medium text-mediumGray hover:text-primary">
-                  <GoGlobe className="text-xl mr-2 " />
-                  Language
-                </Link>
-                <Link to="/sell" className="block my-4 text-md font-medium text-mediumGray hover:text-primary">
-                  Organizers
-                </Link>
-                <Link to="/signin" className="block my-4 text-md font-medium text-mediumGray hover:text-primary">
-                  <RiAccountCircleLine className="text-2xl mr-2" />
-                  Sign In
-                </Link>
-              </>
-            )}
-            {mobileLinks.map((link, index) => (
-              <div key={index} className="my-4">
-                <Link to={link.to} className="block text-md font-bold text-mediumGray hover:text-primary" role="menuitem">
-                  {link.icon}
-                  {link.label}
-                </Link>
-                {link.sublinks && (
-                  <div className="pl-6">
-                    {link.sublinks.map((sublink, subIndex) => (
-                      <Link key={subIndex} to={sublink.to} className="block text-md font-medium text-mediumGray hover:text-primary" role="menuitem">
-                        {sublink.label}
-                      </Link>
-                    ))}
-                  </div>
-                )}
-              </div>
-            ))}
+                ))}
           </div>
         )}
       </div>

@@ -23,9 +23,16 @@ function AddTickets() {
     event.preventDefault();
 
     try {
-      await api.post(`/events/${eventId}/tickets`, ticketData);
+      await api
+        .post(`/event/${eventId}/tickets`, ticketData)
+        .then((res) => {
+          console.log(res);
+        })
+        .catch((err) => {
+          console.log(err);
+        });
 
-      navigate(`/events/${eventId}/tickets`);
+      navigate(`/event/${eventId}/tickets`);
     } catch (error) {
       console.error(error);
     }

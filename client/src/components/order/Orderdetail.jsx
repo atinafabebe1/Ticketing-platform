@@ -12,7 +12,7 @@ const OrderDetails = ({ orderInfo }) => {
         const response = await api.get(`/event/${eventId}/tickets?_id=${orderInfo.ticketTypeId}`);
         setTicketInfo(response.data.data[0]);
       } catch (error) {
-        console.error('Error fetching ticket information:', error);
+        console.log(error);
       }
     };
 
@@ -32,6 +32,9 @@ const OrderDetails = ({ orderInfo }) => {
           </p>
           <p className="text-gray-700">
             <span className="font-semibold">Status:</span> {orderInfo.status}
+          </p>
+          <p className="text-gray-700">
+            <span className="font-semibold">Total Amount:</span> {orderInfo.totalAmount}
           </p>
         </>
       ) : (

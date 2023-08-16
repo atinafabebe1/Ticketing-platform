@@ -4,6 +4,7 @@ import axios from 'axios';
 import EventCard from './EventCard';
 import Icon from '../common/Icon/MoreEvents.jsx';
 import PreviousIcon from '../common/Icon/PreviousIcon.jsx';
+import api from '../../api/api';
 
 const EventList = ({ category }) => {
   const [events, setEvents] = useState([]);
@@ -24,7 +25,7 @@ const EventList = ({ category }) => {
   const fetchEvents = async () => {
     try {
       setIsLoading(true);
-      const response = await axios.get(`http://localhost:3500/api/events?genre=${category.toLowerCase()}&limit=${limit}&page=${currentPage}`);
+      const response = await api.get(`/events?genre=${category.toLowerCase()}&limit=${limit}&page=${currentPage}`);
       const newEvents = response.data?.data || [];
       setEvents(newEvents);
     } catch (error) {
@@ -58,7 +59,7 @@ const EventList = ({ category }) => {
   };
 
   return (
-    <div className="px-4 py-8">
+    <div className="px-4 py-8 ">
       <h2 className="text-3xl font-semibold mb-6 px-2">{category}</h2>
       <div className="relative">
         <div className="absolute top-1/2 left-0 transform -translate-y-1/2 z-10">

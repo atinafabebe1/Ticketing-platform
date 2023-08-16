@@ -26,7 +26,9 @@ function Home() {
     <div>
       <div>
         <HeroSection />
-        <EventList category="Concert" />
+        <div>
+          <EventList category="Concert" />
+        </div>
         <EventList category="Concert" />
       </div>
     </div>

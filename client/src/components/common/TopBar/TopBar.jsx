@@ -75,8 +75,8 @@ const Topbar = () => {
 
   return (
     <>
-      <Navbar mobileLinks={links} />
-      {userToken && userRole === 'user' ? (
+      <Navbar />
+      {userToken && userRole === 'organizer' ? null : (
         <div>
           <div className="flex items-center justify-between p-2 bg-background text-black md:px-8 md:pt-6">
             <div className="hidden md:flex space-x-6">
@@ -126,7 +126,7 @@ const Topbar = () => {
             </div>
           </div>
         </div>
-      ) : null}
+      )}
     </>
   );
 };

@@ -14,6 +14,7 @@ const AddEvent = () => {
     image: '',
     venue: ''
   });
+  const [error, setError] = useState();
 
   const handleChange = (name) => (e) => {
     const value = name === 'image' ? e.target.files[0] : e.target.value;
@@ -22,30 +23,21 @@ const AddEvent = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    try {
-      let formData = new FormData();
-      for (const key in data) {
-        formData.append(key, data[key]);
-      }
-
-      const res = await api.post(`/events`, formData);
-
-      if (res.status === 200) {
-        setData({
-          title: '',
-          description: '',
-          date: '',
-          time: '',
-          location: '',
-          genre: '',
-          image: '',
-          venue: ''
-        });
-        navigate('/events');
-      }
-    } catch (error) {
-      console.log(error);
+    let formData = new FormData();
+    for (const key in data) {
+      formData.append(key, data[key]);
     }
+
+    await api
+      .post(`/events`, formData)
+      .then((res) => {
+        console.log(res);
+        navigate('/events');
+      })
+      .catch((err) => {
+        console.log(err);
+        setError(err.data);
+      });
   };
 
   return (
@@ -158,6 +150,11 @@ const AddEvent = () => {
               onChange={handleChange('venue')}
             />
           </div>
+          {error && (
+            <div>
+              <p className="text-red py-2">{error}</p>
+            </div>
+          )}
           <div className="flex space-x-4">
             <button type="submit" className="bg-blue text-white px-4 py-2 rounded-md hover:bg-blue-600 transition-colors">
               Save Event

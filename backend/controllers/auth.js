@@ -141,13 +141,9 @@ const loginUser = asyncHandler(async (req, res, next) => {
 
             res.clearCookie('token', {
                 httpOnly: true,
-                secure: true,
+                secure: false,
                 sameSite: 'lax',
                 maxAge: 10 * 60 * 60 * 1000, // Set maxAge to 10 hours
-
-                // Allow the cookie to be accessible across subdomains of the frontend's root domain
-                domain: '.netlify.app'
-
             });
         }
 
@@ -158,7 +154,7 @@ const loginUser = asyncHandler(async (req, res, next) => {
         // Creates Secure Cookie with refresh token
         res.cookie('token', newRefreshToken, {
             httpOnly: true,
-            secure: true,
+            secure: false,
             sameSite: 'lax',
             maxAge: 10 * 60 * 60 * 1000 // set maxAge to 10 hours
         });
