@@ -5,30 +5,33 @@ const Ticket = require('../models/ticket');
 const TicketType = require('../models/ticketTypes');
 const ErrorResponse = require('../utils/errorResponse');
 
-const EXPIRATION_WINDOW_SECONDS = 1 * 30;
+const EXPIRATION_WINDOW_SECONDS = 15 * 60;
 
 // @desc    Order a ticket for a user
 // @route   POST api/events/:eventId/tickets/:ticketId/order
 // @access  Private
 const orderTicket = asyncHandler(async (req, res, next) => {
-    const { ticketTypeId, quantity } = req.body;
+    const { ticketId } = req.params
+    const { quantity } = req.body;
     if (!quantity) {
         return next(new ErrorResponse('Quantity is required', 401));
     }
     // Check if the ticket is available
-    const ticket = await TicketType.findById(ticketTypeId);
+    const ticket = await TicketType.findById(ticketId);
 
     if (!ticket) {
         return next(new ErrorResponse('Ticket not found', 404));
     }
 
     if (!ticket.isAvailable(quantity)) {
-        return next(new ErrorResponse('Not enough tickets available', 400));
+        return next(new ErrorResponse('Not enough tickets available', 404));
     }
+    console.log(ticket.price)
+    const totalAmount = quantity * ticket.price;
 
     // Make sure ticket is not already reserved
     const existingOrders = await Order.find({
-        ticketTypeId: ticketTypeId,
+        ticketTypeId: ticketId,
         status: { $in: ["pending", "paid"] },
         expiredAt: { $gt: new Date() },
     });
@@ -44,9 +47,10 @@ const orderTicket = asyncHandler(async (req, res, next) => {
     expiration.setSeconds(expiration.getSeconds() + EXPIRATION_WINDOW_SECONDS);
 
     const order = await Order.create({
-        userId: req.user.id,
-        ticketTypeId: ticketTypeId,
+        userId: req.user._id,
+        ticketTypeId: ticketId,
         quantity: quantity,
+        totalAmount: totalAmount,
         expiredAt: expiration,
     });
 

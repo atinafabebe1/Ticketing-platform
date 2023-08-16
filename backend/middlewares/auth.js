@@ -16,8 +16,9 @@ const auth = asyncHandler(async (req, res, next) => {
         // Extract token from authorization header
         token = req.headers.authorization.split(" ")[1];
     }
+
     if (!token) {
-        return next(new ErrorResponse("Not authroized to access this route sdsd", 401));
+        return next(new ErrorResponse("No token, authorization denied", 401));
     }
 
     try {

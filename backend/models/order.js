@@ -6,8 +6,10 @@ const orderSchema = new mongoose.Schema(
         ticketTypeId: { type: mongoose.Schema.Types.ObjectId, ref: 'TicketType', required: true },
         quantity: { type: Number, required: true },
         status: { type: String, enum: ["pending", "paid", "cancelled"], default: "pending" },
+        totalAmount: { type: Number },
         expiredAt: { type: Date },
-        paymentId: { type: mongoose.Schema.Types.ObjectId, ref: 'Payment' }
+        trx_ref: { type: String },
+        paymentId: { type: mongoose.Schema.Types.ObjectId, ref: 'Payment' },
     },
     { timestamps: true }
 );
