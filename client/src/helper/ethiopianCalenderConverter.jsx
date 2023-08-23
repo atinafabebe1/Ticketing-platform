@@ -1,5 +1,5 @@
 function gregorianToEthiopian(gregorianYear, gregorianMonth, gregorianDay) {
-  const ethiopianYear = gregorianYear - 8;
+  let ethiopianYear = gregorianYear - 8;
   let ethiopianMonth = gregorianMonth + 4;
   let ethiopianDay = gregorianDay - 6;
 

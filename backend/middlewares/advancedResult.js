@@ -1,4 +1,4 @@
-const asyncHandler = require('express-async-handler')
+const asyncHandler = require('express-async-handler');
 
 const advancedResults = (model, populate) =>
     asyncHandler(async (req, res, next) => {
@@ -7,18 +7,37 @@ const advancedResults = (model, populate) =>
         // Copy req.query
         const reqQuery = { ...req.query };
         // Fields to exclude
-        const removeFields = ['select', 'sort', 'page', 'limit'];
+        const removeFields = ['select', 'sort', 'page', 'limit', 'search']; // Added 'search'
+
+        // Extract search query and remove it from reqQuery
+        const searchQuery = reqQuery.search;
+        delete reqQuery.search;
 
         // Loop over removeFields and delete them from reqQuery
         removeFields.forEach((param) => delete reqQuery[param]);
 
         // Create query string
         let queryStr = JSON.stringify(reqQuery);
-        console.log('queryStr:', queryStr);
         queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g, (match) => `$${match}`);
 
         // Finding resource
         query = model.find(JSON.parse(queryStr));
+
+        // Search
+        if (searchQuery) {
+            const searchFields = Object.keys(model.schema.paths).filter(
+                (field) => field !== '_id' && field !== '__v'
+            ); // Get all fields except _id and __v
+
+            const searchFilters = searchFields.map((field) => {
+                if (model.schema.paths[field].instance === 'String') {
+                    return { [field]: { $regex: new RegExp(searchQuery, 'i') } };
+                }
+                return null;
+            });
+
+            query = query.or(searchFilters.filter((filter) => filter !== null));
+        }
 
         // Select Fields
         if (req.query.select) {
@@ -48,7 +67,7 @@ const advancedResults = (model, populate) =>
         }
 
         let results;
-        results = await query.find({});
+        results = await query;
 
         // Pagination result
         const pagination = {};

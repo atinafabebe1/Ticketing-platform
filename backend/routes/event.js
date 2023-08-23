@@ -12,8 +12,8 @@ const EventModel = require('../models/event')
 const upload = require('../utils/multer')
 
 router.get("/", advancedResult(EventModel, ""), getEvents);
-
 router.use(auth); // only authorized organizers can access below endpoints
+
 
 router.post('/', upload.single("image"), createEvent);
 router.put('/:id', updateEvent);
