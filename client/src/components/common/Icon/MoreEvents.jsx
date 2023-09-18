@@ -1,12 +1,15 @@
 import React from 'react';
 import { IoIosArrowForward } from 'react-icons/io';
 
-const MoreIcon = ({ onClick }) => {
+const MoreEvents = ({ onClick }) => {
   return (
-    <button className="bg-gray-100 p-2 rounded-full hover:bg-gray-400 transition duration-300" onClick={onClick}>
-      <IoIosArrowForward className="text-gray-600 text-3xl" />
+    <button
+      onClick={onClick}
+      className="bg-gray-200 hover:bg-gray-300 focus:bg-gray-300 p-3 rounded-full shadow-md focus:outline-none transition-all duration-300 ease-in-out transform hover:scale-105"
+    >
+      <IoIosArrowForward className="text-gray-600 text-1xl" />
     </button>
   );
 };
 
-export default MoreIcon;
+export default MoreEvents;

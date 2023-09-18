@@ -19,24 +19,24 @@ const Topbar = () => {
       icon: <RiMusic2Line className="text-xl inline-block mr-2" />,
       label: 'Concerts',
       sublinks: [
-        { to: '/concerts/pop', label: 'Pop Concerts' },
-        { to: '/concerts/rock', label: 'Rock Concerts' }
+        { to: '/events/Pop', label: 'Pop Concerts' },
+        { to: '/events/Rock', label: 'Rock Concerts' }
       ]
     },
     {
       icon: <RiFootballLine className="text-xl inline-block mr-2" />,
       label: 'Sports',
       sublinks: [
-        { to: '/sports/basketball', label: 'Basketball' },
-        { to: '/sports/football', label: 'Football' }
+        { to: '/events/Basketball', label: 'Basketball' },
+        { to: '/events/Football', label: 'Football' }
       ]
     },
     {
       icon: <RiArtboard2Line className="text-xl inline-block mr-2" />,
       label: 'Theater & Comedy',
       sublinks: [
-        { to: '/theater/plays', label: 'Plays' },
-        { to: '/theater/comedy', label: 'Comedy Shows' }
+        { to: '/events/Plays', label: 'Plays' },
+        { to: '/events/Comedy', label: 'Comedy Shows' }
       ]
     }
   ];

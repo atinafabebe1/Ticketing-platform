@@ -1,6 +1,7 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   theme: {
+
     screens: {
       sm: '380px',
       md: '768px',
@@ -8,6 +9,9 @@ export default {
       xl: '1440px',
     },
     extend: {
+      fontFamily: {
+        sans: ['Roboto', 'sans', 'serif'],
+      },
       colors: {
         background: '#FFFFFF', // White background color
         primary: '#FF5722', // Primary color used for call-to-action elements
@@ -23,7 +27,6 @@ export default {
   content: ['./index.html', './src/**/*.{js,jsx}'],
 
   mode: 'jit',
-  purge: ['./index.html', './src/**/*.{js,jsx}'],
 
   plugins: [],
 };

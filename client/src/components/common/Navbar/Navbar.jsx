@@ -66,10 +66,10 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="flex items-center justify-between p-4 bg-background text-black md:px-8">
+    <nav className="flex items-center justify-between p-2 bg-background text-black md:px-8">
       <Link to="/">
         <div className="flex items-center space-x-4 mr-2">
-          <img src={Logo} alt="Logo" className="sm:w-24 sm:h-18 md:w-32 md:h-26 rounded-full md:mr-8 sm:mr-2" />
+          <img src={Logo} alt="Logo" className="sm:w-24 sm:h-18 md:w-32 md:h-26  md:mr-8 sm:mr-2" />
           <SearchBar />
         </div>
       </Link>

@@ -7,6 +7,13 @@ const ErrorResponse = require('../utils/errorResponse');
 
 const EXPIRATION_WINDOW_SECONDS = 15 * 60;
 
+// @desc    Get a list of all events
+// @route   GET api/orders
+// @access  Public
+const getOrders = asyncHandler(async (req, res, next) => {
+    res.status(200).json(res.advancedResults);
+});
+
 // @desc    Order a ticket for a user
 // @route   POST api/events/:eventId/tickets/:ticketId/order
 // @access  Private

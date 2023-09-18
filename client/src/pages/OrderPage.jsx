@@ -50,7 +50,7 @@ const OrderPage = () => {
 
   const proceedToPayment = async (paymentOptionId, orderId) => {
     const rawPaymentData = {
-      amount: orderInfo.totalAmount.toString(), // Use the totalAmount from orderInfo
+      amount: orderInfo.totalAmount.toString(),
       currency: 'ETB',
       email: 'abebech_bekele@gmail.com',
       first_name: 'Bilen',

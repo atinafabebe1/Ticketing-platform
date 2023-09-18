@@ -45,16 +45,19 @@ function Login() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    dispatch(login(formData));
-    navigate(-1);
+    try {
+      dispatch(login(formData));
+    } catch (error) {
+      navigate(-1);
+    }
   };
 
   return (
     <div className="flex items-center justify-center min-h-screen bg-lightGray">
-      <div className="max-w-sm w-full p-6 bg-white rounded-lg shadow-lg">
+      <div className="max-w-sm w-full p-6 bg-white  shadow-lg">
         <Link to="/">
           <div className="flex flex-col items-center mb-6">
-            <img src={Logo} alt="Logo" className="w-28 h-10 mb-2" />
+            <img src={Logo} alt="Logo" className="w-28 h-10 mb-2 mb-4" />
             <h2 className="text-2xl font-semibold text-mediumGray ">Login to YeneTicet</h2>
           </div>
         </Link>

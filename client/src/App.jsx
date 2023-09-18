@@ -12,7 +12,9 @@ import AddEventPage from './pages/AddEventPage';
 import Tickets from './pages/Ticketspage';
 import AddTicketPage from './pages/AddTicketPage';
 import OrderPage from './pages/OrderPage.jsx';
-
+import EventDetails from './pages/EventDetails.jsx';
+import Footer from './components/common/footer/footer';
+import EventGrid from './pages/EventGrid';
 function App() {
   const location = useLocation();
 
@@ -31,7 +33,9 @@ function App() {
         <Route path="/" element={<Home />} />
         <Route path="/events" element={<Events />} />
         <Route path="/events/add-event" element={<AddEventPage />} />
-        <Route path="/event/:eventId/tickets" element={<Tickets />} />
+        {/* <Route path="/event/:eventId/tickets" element={<Tickets />} /> */}
+        <Route path="/event/:id" element={<EventDetails />} />
+        <Route path="/events/:genre" element={<EventGrid />} />
         <Route path="/event/:eventId/tickets/add" element={<AddTicketPage />} />
         <Route path="/event/:eventId/tickets/:ticketId/order" element={<OrderPage />} />
         <Route path="/profile" element={<UserProfile />} />
@@ -39,6 +43,7 @@ function App() {
         <Route path="/signup" element={<RegisterPage />} />
         <Route path="/organizer-register" element={<OrganizerRegistrationForm />} />
       </Routes>
+      <Footer />
     </>
   );
 }
