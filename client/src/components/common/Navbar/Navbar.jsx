@@ -26,6 +26,7 @@ const Navbar = () => {
 
   const links = {
     user: [
+      { to: '/', label: 'Language', icon: <GoGlobe className="text-xl mr-2" /> },
       { to: '/mytickets', label: 'My Tickets', icon: <RiTicket2Line className="text-xl mr-2" /> },
       { to: '/profile', label: 'Profile', icon: <RiAccountCircleLine className="text-xl mr-2" /> },
       { to: '/', label: 'Logout', icon: <RiLogoutBoxLine className="text-xl mr-2" />, onClick: handleLogout }
@@ -33,13 +34,11 @@ const Navbar = () => {
     organizer: [
       { to: '/', label: 'Dashboard', icon: <RiDashboard2Line className="text-xl mr-2" /> },
       { to: '/events', label: 'Events' },
-      { to: '/reports', label: 'Reports', icon: <GoReport className="text-xl mr-2" /> },
       { to: '/profile', label: 'Profile', icon: <RiAccountCircleLine className="text-xl mr-2" /> },
       { to: '/', label: 'Logout', icon: <RiLogoutBoxLine className="text-xl mr-2" />, onClick: handleLogout }
     ],
     guest: [
       { to: '/', label: 'Language', icon: <GoGlobe className="text-xl mr-2" /> },
-      { to: '/sell', label: 'Organizers' },
       { to: '/signin', label: 'Sign In', icon: <RiAccountCircleLine className="text-2xl mr-2" /> }
     ]
   };

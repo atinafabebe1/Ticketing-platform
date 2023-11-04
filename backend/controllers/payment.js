@@ -22,7 +22,7 @@ const processPayment = async (req, res) => {
         const selectedPaymentOption = await PaymentOption.findById(req.body.paymentOptionId);
 
         const headers = {
-            "Authorization": `Bearer CHASECK_TEST-BJWC87iirkhl6OeGNaAuY8C5K3wsxbsb`,
+            "Authorization": `Bearer CHASECK_TEST-S2S5HYe0EEsveGX28lHwiZgUaJUKi8AU`,
             "Content-Type": "application/json"
         };
 

@@ -69,15 +69,14 @@ const orderTicket = asyncHandler(async (req, res, next) => {
 // @route   GET api/users/:userId/order
 // @access  Private
 const getUserorders = asyncHandler(async (req, res, next) => {
-    const user = await User.findById(req.params.userId);
+    res.status(200).json(res.advancedResults);
+});
 
-    if (!user) {
-        return next(new ErrorResponse('User not found', 404));
-    }
-
-    const orderings = await Order.find({ user: req.params.userId });
-    res.json(orderings);
-
+// @desc    Get a list of orderings for a user
+// @route   GET api/users/:userId/order
+// @access  Private
+const getAllorders = asyncHandler(async (req, res, next) => {
+    res.status(200).json(res.advancedResults);
 });
 
 // @desc    Cancel a ordering
@@ -102,5 +101,6 @@ const cancelorder = asyncHandler(async (req, res, next) => {
 module.exports = {
     orderTicket,
     getUserorders,
-    cancelorder
+    cancelorder,
+    getAllorders
 };

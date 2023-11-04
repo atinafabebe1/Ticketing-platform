@@ -7,7 +7,7 @@ import { useParams } from 'react-router-dom';
 const EventGrid = () => {
   const eventsPerPage = 12;
   const eventsPerRow = 4;
-  const { genre } = useParams(); // Get the genre from URL params
+  const { genre } = useParams();
   const [events, setEvents] = useState([]);
   const [currentPage, setCurrentPage] = useState(1);
   const [loading, setLoading] = useState(true);

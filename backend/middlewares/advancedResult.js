@@ -21,7 +21,16 @@ const advancedResults = (model, populate) =>
         queryStr = queryStr.replace(/\b(gt|gte|lt|lte|in)\b/g, (match) => `$${match}`);
 
         // Finding resource
-        query = model.find(JSON.parse(queryStr));
+        if (req.user) {
+            query = model.find({
+                ...JSON.parse(queryStr),
+                userId: req.user._id,
+            });
+        } else {
+            query = model.find({
+                ...JSON.parse(queryStr),
+            });
+        }
 
         // Search
         if (searchQuery) {

@@ -4,7 +4,7 @@ const ticketSchema = new mongoose.Schema(
     {
         orderId: { type: mongoose.Schema.Types.ObjectId, ref: 'Order', required: true },
         code: { type: String },
-        isUsed: { type: Boolean, default: false }// status enum=["available","reserved","sold"]
+        isUsed: { type: Boolean, default: false }
     },
     { timestamps: true }
 );
