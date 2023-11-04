@@ -2,7 +2,7 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 
 const api = axios.create({
-  baseURL: 'http://localhost:3500/api'
+  baseURL: 'https://ticketing-up1y.onrender.com/api'
 });
 
 // request interceptor to add the access token to every request
